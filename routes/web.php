@@ -14,3 +14,7 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/cats', function () {
+    echo 'Danh sach cat';exit;
+});
