@@ -23,7 +23,7 @@
 		@foreach ($cats as $cat)
 		<tr>
 			<td>{{$cat->id}}</td>
-			<td>{{$cat->name}}</td>
+			<td><a href="{{route('cat.show', $cat->id)}}">{{$cat->name}}</a></td>
 			<td>{{$cat->date_of_birth}}</td>
 			<td><a href="/cats/breeds/{{$cat->breed->name}}">{{$cat->breed->name}}</a></td>
 			<td><a class="btn btn-warning" href="{{route('cat.edit', $cat->id)}}">Edit</a></td>

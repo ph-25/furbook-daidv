@@ -12,6 +12,8 @@
 */
 use Furbook\Breed;
 
+DB::enableQueryLog();
+
 // Home page
 Route::get('/', function () {
     return redirect('/cats');
@@ -23,7 +25,7 @@ Route::get('/cats', ['uses' => 'CatController@index', 'as' => 'cat.index']);
 // Display all cat belong to breed name
 Route::get('/cats/breeds/{name}', function($name){
 	$breed = Breed::with('cats')
-	->where('as', $name)
+	->where('name', $name)
 	->first();
 	return view('cats.index')
 	->with('breed', $breed)
@@ -31,7 +33,7 @@ Route::get('/cats/breeds/{name}', function($name){
 });
 
 // Detail cat has id?
-Route::get('/cats/{id}', ['uses' => 'CatController@show', 'as' => 'cat.show'])->where('id', '[0-9]+');
+Route::get('/cats/{cat}', ['uses' => 'CatController@show', 'as' => 'cat.show'])->where('cat', '[0-9]+');
 
 // Show page create new cat
 Route::get('/cats/create', ['uses' => 'CatController@create', 'as' => 'cat.create']);

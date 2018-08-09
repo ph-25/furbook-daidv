@@ -3,8 +3,10 @@
 namespace Furbook\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Furbook\Http\Requests\CatRequest;
 use Furbook\Cat;
-
+use DB;
+use Validator;
 class CatController extends Controller
 {
     /**
@@ -51,6 +53,29 @@ class CatController extends Controller
     public function store(Request $request)
     {
         $data = $request->all();
+
+        // Define rule of create cat
+        $validator = Validator::make(
+            $data,
+            [
+                'name' => 'required|max:255|unique:cats,name',
+                'date_of_birth' => 'required|date:"YY-mm-dd"',
+                'breed_id' => 'required|numeric'
+            ],
+            [
+                'required' => 'Cột :attribute là bắt buộc.'
+            ]
+        );
+        
+        // Check validation
+         if ($validator->fails()) {
+            return redirect()
+                        ->route('cat.create')
+                        ->withErrors($validator)
+                        ->withInput();
+        }
+
+        // Create new cat
         $cat = Cat::create($data);
         return redirect()
             ->route('cat.show', $cat->id)
@@ -63,9 +88,11 @@ class CatController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Cat $cat)
     {
-        $cat = Cat::find($id);
+        //$cat = Cat::find($id);
+        //var_dump(DB::getQueryLog());
+        //dd($cat);
         return view('cats.show')
             ->with('cat', $cat);
     }
@@ -86,11 +113,11 @@ class CatController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  Furbook\Http\Requests\CatRequest  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(CatRequest $request, $id)
     {
         $data = $request->all();
         $cat = Cat::find($id);
