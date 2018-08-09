@@ -6,6 +6,8 @@
 	@else
 		All cats
 	@endif
+	<a class="btn btn-primary pull-right" href="{{route('cat.create')}}">Add new cat</a>
+	<div class="clearfix"></div>
 @endsection
 
 @section('content')
@@ -24,8 +26,14 @@
 			<td>{{$cat->name}}</td>
 			<td>{{$cat->date_of_birth}}</td>
 			<td><a href="/cats/breeds/{{$cat->breed->name}}">{{$cat->breed->name}}</a></td>
-			<td><a class="btn btn-warning" href="#">Edit</a></td>
-			<td><a class="btn btn-danger" href="#">Delete</a></td>
+			<td><a class="btn btn-warning" href="{{route('cat.edit', $cat->id)}}">Edit</a></td>
+			<td>
+				<form action="{{route('cat.destroy', $cat->id)}}" method="POST" onsubmit="return confirm('Are you sure?');">
+					<input type="hidden" name="_method" value="DELETE">
+    				<input type="hidden" name="_token" value="{{ csrf_token() }}">
+					<button type="submit" class="btn btn-danger">Delete</a>
+				</form>
+			</td>
 		</tr>
 		@endforeach
 	</tbody>

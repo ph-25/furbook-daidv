@@ -10,7 +10,6 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-use Furbook\Cat;
 use Furbook\Breed;
 
 // Home page
@@ -19,29 +18,12 @@ Route::get('/', function () {
 });
 
 // List cats
-Route::get('/cats', function () {
-	// Get all cat
-	//DB::enableQueryLog();
-	$cats = Cat::all();
-	//dd($cats);
-	//dd(DB::getQueryLog());
-
-	# Assign variable to view
-
-	// C1 use array
-	//return view('cats/index', array('cats' => $cats));
-
-	// C2 use compact function
-	//return view('cats/index', compact('cats'));
-
-	// C3 use with function
-	return view('cats/index')->with('cats', $cats);
-});
+Route::get('/cats', ['uses' => 'CatController@index', 'as' => 'cat.index']);
 
 // Display all cat belong to breed name
 Route::get('/cats/breeds/{name}', function($name){
 	$breed = Breed::with('cats')
-	->where('name', $name)
+	->where('as', $name)
 	->first();
 	return view('cats.index')
 	->with('breed', $breed)
@@ -49,16 +31,19 @@ Route::get('/cats/breeds/{name}', function($name){
 });
 
 // Detail cat has id?
-Route::get('/cats/{id}', function ($id) {
-    echo 'Cat #' . $id;
-})->where('id', '[0-9]+');
+Route::get('/cats/{id}', ['uses' => 'CatController@show', 'as' => 'cat.show'])->where('id', '[0-9]+');
 
 // Show page create new cat
-Route::get('/cats/create', function(){
-	return view('cats.create');
-});
+Route::get('/cats/create', ['uses' => 'CatController@create', 'as' => 'cat.create']);
 
 // Insert new cat
-Route::post('/cats', function(){
-	dd(Request::all());
-});
+Route::post('/cats', ['uses' => 'CatController@store', 'as' => 'cat.store']);
+
+// Show page edit a cat
+Route::get('/cats/{id}/edit', ['uses' => 'CatController@edit', 'as' => 'cat.edit']);
+
+// Update a cat
+Route::put('/cats/{id}', ['uses' => 'CatController@update', 'as' => 'cat.update']);
+
+// Delete a cat
+Route::delete('/cats/{id}', ['uses' => 'CatController@destroy', 'as' => 'cat.destroy']);

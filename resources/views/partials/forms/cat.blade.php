@@ -10,20 +10,20 @@
 <div class="form-group">
     {!! Form::label('name', 'Name') !!}
     <div class="form-controls">
-        <input class="form-control" name="name" type="text" value="{{ old('name', isset($cat->name) ? $cat->name : '') }}" id="name">
+        <input class="form-control" name="name" type="text" value="{{ old('name', isset($cat) ? $cat->name : '') }}" id="name">
     </div>
 </div>
 <div class="form-group">
     {!! Form::label('date_of_birth', 'Date of Birth') !!}
     <div class="form-controls">
-        {!! Form::date('date_of_birth', null, ['class' =>
-        'form-control']) !!}
+        {!! Form::text('date_of_birth', isset($cat) ? $cat->date_of_birth : null, ['class' =>
+        'form-control datepicker']) !!}
     </div>
 </div>
 <div class="form-group">
     {!! Form::label('breed_id', 'Breed') !!}
     <div class="form-controls">
-        {!! Form::select('breed_id', @$breeds ? $breeds : [], null, ['class' => 'form-control']) !!}
+        {!! Form::select('breed_id', isset($breeds) ? $breeds : [], null, ['class' => 'form-control']) !!}
     </div>
 </div>
 {!! Form::submit('Save Cat', ['class' => 'btn btn-primary']) !!}
