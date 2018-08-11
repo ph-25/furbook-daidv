@@ -6,9 +6,20 @@ use Illuminate\Http\Request;
 use Furbook\Http\Requests\CatRequest;
 use Furbook\Cat;
 use DB;
+use Illuminate\Support\Facades\Auth;
 use Validator;
 class CatController extends Controller
 {
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('admin')->only('destroy');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -100,12 +111,17 @@ class CatController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  Cat  $cat
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Cat $cat)
     {
-        $cat = Cat::find($id);
+        if(!Auth::user()->canEdit($cat)){
+            return redirect()
+                ->back()
+                ->withError('Permission Denied');
+        }
+        //$cat = Cat::find($id);
         return view('cats.edit')
             ->with('cat', $cat);
     }
@@ -113,14 +129,14 @@ class CatController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  Furbook\Http\Requests\CatRequest  $request
-     * @param  int  $id
+     * @param  \Furbook\Http\Requests\CatRequest  $request
+     * @param  Cat  $cat
      * @return \Illuminate\Http\Response
      */
-    public function update(CatRequest $request, $id)
+    public function update(CatRequest $request,Cat $cat)
     {
         $data = $request->all();
-        $cat = Cat::find($id);
+        //$cat = Cat::find($id);
         $cat->update($data);
         return redirect()
             ->route('cat.show', $cat->id)

@@ -11,17 +11,19 @@ class IsAdministrator
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
+     * @param  \Illuminate\Http\Request $request
+     * @param  \Closure $next
      * @return mixed
      */
     public function handle($request, Closure $next)
     {
-        if(!Auth::user()->isAdministrator()){
-            if($this->request->ajax()){
+        if (!Auth::user()->isAdministrator()) {
+            if ($request->ajax()) {
                 return response('Forbidden', 403);
-            }else{
-                throw new AccessDeniedException;
+            } else {
+                return redirect()
+                    ->back()
+                    ->withError('Permission Denied');
             }
         }
         return $next($request);

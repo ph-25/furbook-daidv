@@ -3,7 +3,7 @@
 namespace Furbook\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Http\Request;
+use Auth;
 
 class CatRequest extends FormRequest
 {
@@ -14,7 +14,17 @@ class CatRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        switch ($this->method()) {
+            case 'PUT':
+            case 'PATCH':
+                $cat = $this->route('cat');
+                if(Auth::user()->canEdit($cat)){
+                    return true;
+                }
+                return false;
+            default:
+                return true;
+        }
     }
 
     /**
@@ -24,10 +34,10 @@ class CatRequest extends FormRequest
      */
     public function rules()
     {
-        $catId = Request::route('id');
+        $cat = $this->route('cat');
         //dd($catId);
         return [
-            'name' => 'required|max:255|unique:cats,name,' . $catId,
+            'name' => 'required|max:255|unique:cats,name,' . $cat->id,
                 'date_of_birth' => 'required|date:"YY-mm-dd"',
                 'breed_id' => 'required|numeric'
         ];
