@@ -59,7 +59,7 @@ class User extends Authenticatable
      *
      * @return boolean
      */
-    public function isAdmintrator()
+    public function isAdministrator()
     {
         return $this->getAttribute('is_admin');
     }
