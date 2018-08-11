@@ -16,6 +16,11 @@ DB::enableQueryLog();
 
 // Home page
 Route::get('/', function () {
+	// Demo model events use Observer
+	//$user = Furbook\User::find(1);
+	//dd($user->toArray());
+
+	// Return view
     return redirect('/cats');
 });
 
