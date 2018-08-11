@@ -54,3 +54,7 @@ Route::put('/cats/{id}', ['uses' => 'CatController@update', 'as' => 'cat.update'
 
 // Delete a cat
 Route::delete('/cats/{id}', ['uses' => 'CatController@destroy', 'as' => 'cat.destroy']);
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');

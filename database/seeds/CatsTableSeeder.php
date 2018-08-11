@@ -16,6 +16,7 @@ class CatsTableSeeder extends Seeder
                 'name' => 'Doremon',
                 'date_of_birth' => date('Y-m-d'),
                 'breed_id' => 1,
+                'user_id' => 1,
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s')
             ],
@@ -23,6 +24,7 @@ class CatsTableSeeder extends Seeder
                 'name' => 'Doremi',
                 'date_of_birth' => date('Y-m-d'),
                 'breed_id' => 1,
+                'user_id' => 2,
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s')
             ],
@@ -30,6 +32,7 @@ class CatsTableSeeder extends Seeder
                 'name' => 'Black Cat',
                 'date_of_birth' => date('Y-m-d'),
                 'breed_id' => 2,
+                'user_id' => 2,
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s')
             ]

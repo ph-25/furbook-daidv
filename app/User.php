@@ -4,6 +4,7 @@ namespace Furbook;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Furbook\Cat;
 
 class User extends Authenticatable
 {
@@ -26,4 +27,40 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    protected $casts = [
+        'is_admin' => 'boolean'
+    ];
+
+    /**
+     * Check user logged is owns?
+     *
+     * @param Cat $cat
+     * @return boolean
+     */
+    public function owns(Cat $cat)
+    {
+        return $this->id == $cat->user_id;
+    }
+
+    /**
+     * Check permission can edit
+     *
+     * @param Cat $cat
+     * @return boolean
+     */
+    public function canEdit(Cat $cat)
+    {
+        return $this->is_admin || $this->owns($cat);
+    }
+
+    /**
+     * Check user logged is admin?
+     *
+     * @return boolean
+     */
+    public function isAdmintrator()
+    {
+        return $this->getAttribute('is_admin');
+    }
 }
