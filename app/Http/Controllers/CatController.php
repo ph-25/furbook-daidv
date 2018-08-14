@@ -25,11 +25,18 @@ class CatController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         // Get all cat
         //DB::enableQueryLog();
-        $cats = Cat::all();
+        $perPage = 10;
+        $cats = Cat::paginate($perPage);
+
+        // Check request ajax?
+        if($request->ajax()){
+            return view('partials.cat')->with('cats', $cats);
+        }
+
         //dd($cats);
         //dd(DB::getQueryLog());
 
