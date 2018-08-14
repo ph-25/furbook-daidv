@@ -81,7 +81,13 @@ class CategoryController extends Controller
      */
     public function show($id)
     {
-        //
+        $category = Category::findOrFail($id);
+        return response([
+            'category' => [
+                'id' => (int)$category->id,
+                'name' => $category->name
+            ]
+        ], 200);
     }
 
     /**
@@ -104,7 +110,29 @@ class CategoryController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $validator = Validator::make($request->all(),
+            [
+                'name' => 'required|max:255'
+            ],
+            [
+                'required' => 'Cột :attribute là bắt buộc.',
+                'max' => 'Cột :attribute không được vượt quá :size kí tự.',
+            ]
+        );
+
+        // Check validation
+        if ($validator->fails()) {
+            return response(['message' => $validator->errors()], 400);
+        }
+        $category = Category::find($id);
+        $category->update($request->all());
+        $response = array(
+            'category' => array(
+                'id' => (int)$category->id,
+                'name' => $category->name,
+            )
+        );
+        return response($response, 201);
     }
 
     /**
@@ -115,6 +143,10 @@ class CategoryController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $category = Category::findOrFail($id);
+        if(!$category->delete()){
+            return response(null, 500);
+        }
+        return response(null, 204);
     }
 }
